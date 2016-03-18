@@ -1,3 +1,4 @@
+*.txt
 captain*
 docker/package.json
 log.txt
