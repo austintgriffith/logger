@@ -1,0 +1,4 @@
+docker/package.json
+log.txt
+node_modules
+npm-debug.log
