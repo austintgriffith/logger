@@ -27,6 +27,23 @@ app.get('/:namespace/:n*?', function(req, res){
     });
 });
 
+app.get('/:namespace/:n*?/:filter*?', function(req, res){
+    var lines = parseInt(req.params.n);
+    if(!lines) lines=1000;
+    var filename = req.params.namespace.replace(/\W/g, '')+"Log.txt";
+    var filtertext = "";
+    if(req.params.filter){
+        filtertext = " | grep '"+req.params.filter+"'";
+    }
+    exec('tail -n '+lines+' '+filename+""+filtertext, function(error, stdout, stderr) {
+        res.send(stdout);
+        if (error !== null) {
+            console.log('exec error: ' + error);
+        }
+    });
+});
+
+
 app.post('/:namespace', function(req, res){
     var timestamp = Date.now();
     res.send(""+timestamp);
