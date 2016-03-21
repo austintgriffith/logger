@@ -15,19 +15,8 @@ app.get('/favicon.ico', function(req, res){
 
 var exec = require('child_process').exec;
 
-app.get('/:namespace/:n*?', function(req, res){
-    var lines = parseInt(req.params.n);
-    if(!lines) lines=1000;
-    var filename = req.params.namespace.replace(/\W/g, '')+"Log.txt";
-    exec('tail -n '+lines+' '+filename, function(error, stdout, stderr) {
-        res.send(stdout);
-        if (error !== null) {
-            console.log('exec error: ' + error);
-        }
-    });
-});
 
-app.get('/:namespace/:n*?/:filter*?', function(req, res){
+app.get('/:namespace/:n*/:filter*', function(req, res){
     var lines = parseInt(req.params.n);
     if(!lines) lines=1000;
     var filename = req.params.namespace.replace(/\W/g, '')+"Log.txt";
@@ -35,7 +24,21 @@ app.get('/:namespace/:n*?/:filter*?', function(req, res){
     if(req.params.filter){
         filtertext = " | grep '"+req.params.filter+"'";
     }
-    exec('tail -n '+lines+' '+filename+""+filtertext, function(error, stdout, stderr) {
+    //console.log("Filter:"+filtertext)
+    exec('tail -n '+lines+' '+filename+""+filtertext,{maxBuffer: 1024 * 1000}, function(error, stdout, stderr) {
+        res.send(stdout);
+        if (error !== null) {
+            console.log('exec error: ' + error);
+        }
+    });
+});
+
+
+app.get('/:namespace/:n*?', function(req, res){
+    var lines = parseInt(req.params.n);
+    if(!lines) lines=1000;
+    var filename = req.params.namespace.replace(/\W/g, '')+"Log.txt";
+    exec('tail -n '+lines+' '+filename,{maxBuffer: 1024 * 1000}, function(error, stdout, stderr) {
         res.send(stdout);
         if (error !== null) {
             console.log('exec error: ' + error);
