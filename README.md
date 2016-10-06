@@ -13,6 +13,7 @@ GET /:yournamespace/[:numberoflines] to read logs
 Example PHP Code:
 ```php
 $ch = curl_init();curl_setopt($ch, CURLOPT_URL,"logger.madwire.net/###NAMESPACE###");curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2000);curl_setopt($ch, CURLOPT_TIMEOUT, 3000);
 curl_setopt($ch, CURLOPT_POSTFIELDS,"###somekey###=###somevalue###");curl_exec($ch);curl_close($ch);
 ```
 
